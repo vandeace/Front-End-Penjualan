@@ -3,7 +3,7 @@ import { connect } from "react-redux";
 import * as actStock from "../_actions/storage";
 import * as actCategory from "../_actions/category";
 import NumberFormat from "react-number-format";
-import { Table, Button, Modal, Form, Alert } from "react-bootstrap";
+import { Table, Button, Modal, Form, Alert, Row } from "react-bootstrap";
 import { RiAddCircleLine } from "react-icons/ri";
 import { API } from "../config/api";
 
@@ -125,7 +125,7 @@ class Storage extends Component {
       });
       if (addData) {
         this.props.dispatch(actCategory.getCategories());
-        alert("success add new category")
+        alert("success add new category");
       }
 
       this.setState({ cateModal: false });
@@ -137,159 +137,114 @@ class Storage extends Component {
   render() {
     const { data: stocks, loading, error } = this.props.stock;
     const { data: categories } = this.props.category;
-  
+
     if (loading) return <h1>Loading</h1>;
     if (error) return <h1>ERROR</h1>;
     return (
       <div>
-        <h4>DATA STOCK BARANG</h4>
-
-        <Button
-          variant="primary"
-          style={{ marginBottom: 20, marginLeft: 20 }}
-          onClick={this.showAdd}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            marginTop: 40,
+          }}
         >
-          <RiAddCircleLine /> Tambah Data Produk
-        </Button>
-
-        <Button
-          variant="primary"
-          style={{ marginBottom: 20, marginLeft: 20 }}
-          onClick={this.showCat}
+          <h1> STOCK BARANG </h1>
+        </div>
+        <div
+          style={{
+            margin: "auto",
+            marginTop: "30px",
+            width: "80%",
+          }}
         >
-          <RiAddCircleLine /> Tambah Data Category
-        </Button>
+          <Button
+            variant="primary"
+            style={{ marginBottom: 20, marginLeft: 20 }}
+            onClick={this.showAdd}
+          >
+            <RiAddCircleLine /> Tambah Data Produk
+          </Button>
 
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>No</th>
-              <th>Barang</th>
-              <th>Jenis</th>
-              <th>Harga</th>
-              <th>Quantity</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {stocks.map((item, index) => (
-              <tr key={index}>
-                <th>{index + 1}</th>
-                <td>{item.namaProduk}</td>
-                <td>{item.category.jenisProduk}</td>
-                <td>
-                  <NumberFormat
-                    value={item.harga}
-                    displayType={"text"}
-                    thousandSeparator={true}
-                    prefix={"Rp. "}
-                  />
-                </td>
-                <td>{item.quantity}</td>
+          <Button
+            variant="primary"
+            style={{ marginBottom: 20, marginLeft: 20 }}
+            onClick={this.showCat}
+          >
+            <RiAddCircleLine /> Tambah Data Category
+          </Button>
 
-                <td>
-                  <button
-                    className="button"
-                    id={item.id}
-                    onClick={this.showEdit}
-                  >
-                    EDIT
-                  </button>
-                  <button
-                    style={{ marginLeft: 20 }}
-                    className="button"
-                    id={item.id}
-                    onClick={this.showDel}
-                  >
-                    DELETE
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-        {/* ADD PRODUCT MODAL */}
-        <Modal
-          show={this.state.addModal}
-          onHide={this.hideAdd}
-          size="lg"
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>Tambah Produk</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
-            <Form>
-              <Form.Group>
-                <Form.Label className="bold">Nama Produk</Form.Label>
-                <Form.Control
-                  name="namaProduk"
-                  type="text"
-                  placeholder="Masukan Nama Produk"
-                  onChange={this.handleChangeTxt}
-                  value={this.state.namaProduk}
-                />
-              </Form.Group>
-              <Form.Group>
-                <Form.Label className="bold">Jenis Produk</Form.Label>
-                <select
-                  onChange={this.handleChangeTxt}
-                  defaultValue={"select"}
-                  name="categoryId"
-                  id="categoryId"
-                  className="form-control"
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Barang</th>
+                <th>Jenis</th>
+                <th>Harga</th>
+                <th>Quantity</th>
+                <th
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
                 >
-                  <option value="select" disabled>
-                    Pilih Jenis Produk
-                  </option>
-                  {categories &&
-                    categories.length > 0 &&
-                    categories.map((item) => (
-                      <option value={item.id}>{item.jenisProduk}</option>
-                    ))}
-                </select>
-              </Form.Group>
-              <Form.Group>
-                <Form.Label className="bold">Quantity</Form.Label>
-                <Form.Control
-                  name="quantity"
-                  type="text"
-                  placeholder="Masukan Jumlah Produk"
-                  onChange={this.handleChangeTxt}
-                  value={this.state.quantity}
-                />
-              </Form.Group>
-              <Form.Group>
-                <Form.Label className="bold">Harga</Form.Label>
-                <Form.Control
-                  name="harga"
-                  type="text"
-                  placeholder="Masukan Harga Produk"
-                  onChange={this.handleChangeTxt}
-                  value={this.state.harga}
-                />
-              </Form.Group>
-            </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={this.hideAdd}>
-              Close
-            </Button>
-            <Button variant="primary" onClick={this.addData}>
-              Tambah Data
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        {/* Modal Edit PRODUCT */}
-        <Modal
-          show={this.state.editModal}
-          onHide={this.hideEdit}
-          size="md"
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-        >
-          <Form>
+                  Action
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              {stocks.map((item, index) => (
+                <tr key={index}>
+                  <th>{index + 1}</th>
+                  <td>{item.namaProduk}</td>
+                  <td>{item.category.jenisProduk}</td>
+                  <td>
+                    <NumberFormat
+                      value={item.harga}
+                      displayType={"text"}
+                      thousandSeparator={true}
+                      prefix={"Rp. "}
+                    />
+                  </td>
+                  <td>{item.quantity}</td>
+
+                  <td
+                    style={{
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
+                    }}
+                  >
+                    <Button
+                      variant="success"
+                      id={item.id}
+                      onClick={this.showEdit}
+                    >
+                      EDIT
+                    </Button>
+                    <Button
+                      style={{ marginLeft: 20 }}
+                      variant="danger"
+                      id={item.id}
+                      onClick={this.showDel}
+                    >
+                      DELETE
+                    </Button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </Table>
+          {/* ADD PRODUCT MODAL */}
+          <Modal
+            show={this.state.addModal}
+            onHide={this.hideAdd}
+            size="lg"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+          >
             <Modal.Header closeButton>
               <Modal.Title>Tambah Produk</Modal.Title>
             </Modal.Header>
@@ -347,70 +302,147 @@ class Storage extends Component {
               </Form>
             </Modal.Body>
             <Modal.Footer>
-              <Button variant="secondary" onClick={this.hideEdit}>
+              <Button variant="secondary" onClick={this.hideAdd}>
                 Close
               </Button>
-              <Button variant="primary" onClick={this.editData}>
-                Edit
+              <Button variant="primary" onClick={this.addData}>
+                Tambah Data
               </Button>
             </Modal.Footer>
-          </Form>
-        </Modal>
-        {/* MODAL DELETE PRODUCT */}
-        <Modal
-          show={this.state.deleteModal}
-          onHide={this.hideDel}
-          size="md"
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>APAKAH KAMU YAKIN MENGHAPUS PRODUCT INI?</Modal.Title>
-          </Modal.Header>
-
-          <Modal.Footer>
-            <Button variant="secondary" onClick={this.hideDel}>
-              NO
-            </Button>
-            <Button variant="primary" onClick={this.delData}>
-              YES
-            </Button>
-          </Modal.Footer>
-        </Modal>
-        {/* MODAL ADD CATEGORY */}
-        <Modal
-          show={this.state.cateModal}
-          onHide={this.hideCat}
-          size="md"
-          aria-labelledby="contained-modal-title-vcenter"
-          centered
-        >
-          <Modal.Header closeButton>
-            <Modal.Title>TAMBAH KATEGORI BARU</Modal.Title>
-          </Modal.Header>
-          <Modal.Body>
+          </Modal>
+          {/* Modal Edit PRODUCT */}
+          <Modal
+            show={this.state.editModal}
+            onHide={this.hideEdit}
+            size="md"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+          >
             <Form>
-              <Form.Group>
-                <Form.Label className="bold">Nama Kategori</Form.Label>
-                <Form.Control
-                  name="jenisProduk"
-                  type="text"
-                  placeholder="Input New Category"
-                  onChange={this.handleChangeTxt}
-                  value={this.state.jenisProduk}
-                />
-              </Form.Group>
+              <Modal.Header closeButton>
+                <Modal.Title>Tambah Produk</Modal.Title>
+              </Modal.Header>
+              <Modal.Body>
+                <Form>
+                  <Form.Group>
+                    <Form.Label className="bold">Nama Produk</Form.Label>
+                    <Form.Control
+                      name="namaProduk"
+                      type="text"
+                      placeholder="Masukan Nama Produk"
+                      onChange={this.handleChangeTxt}
+                      value={this.state.namaProduk}
+                    />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label className="bold">Jenis Produk</Form.Label>
+                    <select
+                      onChange={this.handleChangeTxt}
+                      defaultValue={"select"}
+                      name="categoryId"
+                      id="categoryId"
+                      className="form-control"
+                    >
+                      <option value="select" disabled>
+                        Pilih Jenis Produk
+                      </option>
+                      {categories &&
+                        categories.length > 0 &&
+                        categories.map((item) => (
+                          <option value={item.id}>{item.jenisProduk}</option>
+                        ))}
+                    </select>
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label className="bold">Quantity</Form.Label>
+                    <Form.Control
+                      name="quantity"
+                      type="text"
+                      placeholder="Masukan Jumlah Produk"
+                      onChange={this.handleChangeTxt}
+                      value={this.state.quantity}
+                    />
+                  </Form.Group>
+                  <Form.Group>
+                    <Form.Label className="bold">Harga</Form.Label>
+                    <Form.Control
+                      name="harga"
+                      type="text"
+                      placeholder="Masukan Harga Produk"
+                      onChange={this.handleChangeTxt}
+                      value={this.state.harga}
+                    />
+                  </Form.Group>
+                </Form>
+              </Modal.Body>
+              <Modal.Footer>
+                <Button variant="secondary" onClick={this.hideEdit}>
+                  Close
+                </Button>
+                <Button variant="primary" onClick={this.editData}>
+                  Edit
+                </Button>
+              </Modal.Footer>
             </Form>
-          </Modal.Body>
-          <Modal.Footer>
-            <Button variant="secondary" onClick={this.hideCat}>
-              NO
-            </Button>
-            <Button variant="primary" onClick={this.addCategory}>
-              YES
-            </Button>
-          </Modal.Footer>
-        </Modal>
+          </Modal>
+          {/* MODAL DELETE PRODUCT */}
+          <Modal
+            show={this.state.deleteModal}
+            onHide={this.hideDel}
+            size="md"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>
+                APAKAH KAMU YAKIN MENGHAPUS PRODUCT INI?
+              </Modal.Title>
+            </Modal.Header>
+
+            <Modal.Footer>
+              <Button variant="secondary" onClick={this.hideDel}>
+                NO
+              </Button>
+              <Button variant="primary" onClick={this.delData}>
+                YES
+              </Button>
+            </Modal.Footer>
+          </Modal>
+          {/* MODAL ADD CATEGORY */}
+          <Modal
+            show={this.state.cateModal}
+            onHide={this.hideCat}
+            size="md"
+            aria-labelledby="contained-modal-title-vcenter"
+            centered
+          >
+            <Modal.Header closeButton>
+              <Modal.Title>TAMBAH KATEGORI BARU</Modal.Title>
+            </Modal.Header>
+            <Modal.Body>
+              <Form>
+                <Form.Group>
+                  <Form.Label className="bold">Nama Kategori</Form.Label>
+                  <Form.Control
+                    name="jenisProduk"
+                    type="text"
+                    placeholder="Input New Category"
+                    onChange={this.handleChangeTxt}
+                    value={this.state.jenisProduk}
+                  />
+                </Form.Group>
+              </Form>
+            </Modal.Body>
+            <Modal.Footer>
+              <Button variant="secondary" onClick={this.hideCat}>
+                NO
+              </Button>
+              <Button variant="primary" onClick={this.addCategory}>
+                YES
+              </Button>
+            </Modal.Footer>
+          </Modal>
+        </div>
       </div>
     );
   }
