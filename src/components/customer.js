@@ -10,6 +10,7 @@ class Cust extends Component {
   state = {
     addModal: false,
     editModal: false,
+    deleteModal: false,
     nama: "",
     gender: "",
     phone: "",
@@ -36,10 +37,15 @@ class Cust extends Component {
         this.props.dispatch(actUser.getUsers());
       }
       this.setState({ addModal: false });
+      this.setState({ nama: "" });
+      this.setState({ gender: "" });
+      this.setState({ alamat: "" });
+      this.setState({ phone: "" });
     } catch (error) {
       console.log(error);
     }
   };
+
   editData = async () => {
     try {
       const idCust = this.state.id;
@@ -59,11 +65,34 @@ class Cust extends Component {
     }
   };
 
+  delData = async () => {
+    try {
+      const idCust = this.state.id;
+      console.log(idCust);
+      const delData = await API.delete(`/customer/${idCust}`);
+      if (delData) {
+        this.props.dispatch(actUser.getUsers());
+      }
+      this.setState({ deleteModal: false });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   showAdd = () => {
     this.setState({ addModal: true });
   };
   hideAdd = () => {
     this.setState({ addModal: false });
+  };
+
+
+  showDel = (e) => {
+    this.setState({ id: e.target.id });
+    this.setState({ deleteModal: true });
+  };
+  hideDel = () => {
+    this.setState({ deleteModal: false });
   };
 
   showEdit = (e) => {
@@ -82,7 +111,8 @@ class Cust extends Component {
 
     return (
       <div>
-        <h1>DATA CUSTOMER</h1>
+        <h4>DATA CUSTOMER</h4>
+
         <Button
           variant="secondary"
           style={{ marginBottom: 20, marginLeft: 20 }}
@@ -116,8 +146,13 @@ class Cust extends Component {
                     onClick={this.showEdit}
                   >
                     EDIT
-                  </button>{" "}
-                  <button style={{ marginLeft: 20 }} className="button">
+                  </button>
+                  <button
+                    style={{ marginLeft: 20 }}
+                    className="button"
+                    id={item.id}
+                    onClick={this.showDel}
+                  >
                     DELETE
                   </button>
                 </td>
@@ -125,7 +160,7 @@ class Cust extends Component {
             ))}
           </tbody>
         </Table>
-
+        {/* //MODAL EDIT CUSTOMER */}
         <Modal
           show={this.state.editModal}
           onHide={this.hideEdit}
@@ -134,7 +169,7 @@ class Cust extends Component {
           centered
         >
           <Modal.Header closeButton>
-            <Modal.Title>Tambah Customer</Modal.Title>
+            <Modal.Title>EDIT CUSTOMER</Modal.Title>
           </Modal.Header>
           <Modal.Body>
             <Form>
@@ -187,7 +222,7 @@ class Cust extends Component {
             </Form>
           </Modal.Body>
           <Modal.Footer>
-            <Button variant="secondary" onClick={this.props.onHide}>
+            <Button variant="secondary" onClick={this.hideEdit}>
               Close
             </Button>
             <Button variant="primary" onClick={this.editData}>
@@ -195,7 +230,7 @@ class Cust extends Component {
             </Button>
           </Modal.Footer>
         </Modal>
-
+        {/* Modal TAMBAH CUSTOMER */}
         <Modal
           show={this.state.addModal}
           onHide={this.hideAdd}
@@ -262,6 +297,26 @@ class Cust extends Component {
             </Button>
             <Button variant="primary" onClick={this.addData}>
               Tambah Data
+            </Button>
+          </Modal.Footer>
+        </Modal>
+        <Modal
+          show={this.state.deleteModal}
+          onHide={this.hideEdit}
+          size="lg"
+          aria-labelledby="contained-modal-title-vcenter"
+          centered
+        >
+          <Modal.Header closeButton>
+            <Modal.Title>APAKAH KAMU YAKIN MENGHAPUS CUSTOMER INI?</Modal.Title>
+          </Modal.Header>
+
+          <Modal.Footer>
+            <Button variant="secondary" onClick={this.hideDel}>
+              NO
+            </Button>
+            <Button variant="primary" onClick={this.delData}>
+              YES
             </Button>
           </Modal.Footer>
         </Modal>

@@ -1,7 +1,7 @@
 import { GET_CUST } from "../_store/action-types";
 import axios from "axios";
 
-export const getUsers = (token) => {
+export const getUsers = () => {
   return {
     type: GET_CUST,
     payload: axios({

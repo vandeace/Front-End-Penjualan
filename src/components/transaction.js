@@ -32,7 +32,7 @@ class Transaction extends Component {
     return (
       <div>
         <ModalTransaction show={this.state.modal} onHide={this.hideModal} />
-        <h1>DATA PENJUALAN</h1>
+        <h4>DATA PENJUALAN</h4>
         <Table striped bordered hover>
           <thead>
             <tr>

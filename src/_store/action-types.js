@@ -1,4 +1,6 @@
 export const GET_CUST = 'GET_CUST';
+export const GET_CAT = 'GET_CAT';
+
 
 export const GET_PRODUCT = 'GET_PRODUCT';
 

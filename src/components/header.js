@@ -26,7 +26,7 @@ export default class header extends Component {
           </Nav.Item>
           <Nav.Item>
             <Nav.Link>
-              <Link to="/sell">Buat Transaksi</Link>
+              <Link to="/order">Buat Transaksi</Link>
             </Nav.Link>
           </Nav.Item>
           
