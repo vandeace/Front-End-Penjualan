@@ -31,7 +31,7 @@ To Start Server:
 
 To Visit App:
 
-`localhost:3000/ideas`
+`localhost:3000`
 #### Back-End:
 For backend setup follow this link :
   https://github.com/vandeace/Backend-Penjualan
