@@ -9,7 +9,6 @@ Stock : create new stock, create category, edit stock, delete stock
 Transaction : view detail transaction, delete transaction
 Order : make new order 
 
-## Project Screen Shot(s)
 
 ## Installation and Setup Instructions
 
